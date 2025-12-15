@@ -1,0 +1,28 @@
+[project]
+name = "audio-synthesis-parameter-matching"
+version = "1.0.0"
+description = "GPU-accelerated audio synthesis with CMA-ES parameter optimization"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=2.0.0",
+    "scipy>=1.13.0",
+    "panns-inference>=0.1.0",
+    "laion-clap>=1.1.0",
+    "librosa>=0.10.0",
+    "torchaudio>=2.0.0",
+    "dearpygui>=1.10.0",
+    "sounddevice>=0.4.6",
+    "cmaes>=0.10.0",
+    "soundfile>=0.12.0",
+    "transformers>=4.30.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchaudio = { index = "pytorch-cu124" }
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
