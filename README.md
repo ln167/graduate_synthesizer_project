@@ -2,6 +2,29 @@
 
 GPU-accelerated audio synthesis with CMA-ES parameter optimization. This system uses deep learning embeddings (PANNs) to match synthesizer parameters to target audio through black-box optimization.
 
+## Synthesizer
+
+![GPU Synthesizer](images/synth_gui.png)
+
+## How It Works
+
+![System Architecture](images/architecture.png)
+
+### Target Processing (One-time)
+1. **Get Target Audio** - Load or record the sound you want to match
+2. **Pre-process** - Detect pitch using pYIN algorithm and estimate noise characteristics
+3. **Extract Embedding** - Run through PANNs CNN-14 to get a 2048-dimensional embedding vector
+
+### Optimization Loop (Iterative)
+4. **Generate Candidates** - CMA-ES algorithm generates N parameter sets (e.g., 256 candidates per batch)
+5. **Synthesize Audio** - GPU renders audio for all candidates in parallel
+6. **Extract Embeddings** - Run all candidates through PANNs CNN-14 to get their embedding vectors
+7. **Compare** - Calculate cosine similarity between target embedding and each candidate embedding
+8. **Select & Update** - CMA-ES selects best candidates and updates the search distribution
+9. **Repeat** - Continue until similarity threshold reached or max iterations
+
+The result is a set of 37 synthesizer parameters that produce audio perceptually similar to the target. See the paper PDF for full technical details.
+
 ## System Requirements
 
 - Python >= 3.9
