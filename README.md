@@ -10,26 +10,27 @@ GPU-accelerated audio synthesis with CMA-ES parameter optimization. This system 
 
 ![System Architecture](images/architecture.png)
 
-### Target Processing (One-time)
-1. **Get Target Audio** - Load or record the sound you want to match
+### Target Processing (once per target audio)
+
+1. **Get Target Audio** - Load any sampled sound
 2. **Pre-process** - Detect pitch using pYIN algorithm and estimate noise characteristics
 3. **Extract Embedding** - Run through PANNs CNN-14 to get a 2048-dimensional embedding vector
 
 ### Optimization Loop (Iterative)
-4. **Generate Candidates** - CMA-ES algorithm generates N parameter sets (e.g., 256 candidates per batch)
+
+4. **Generate Candidates** - CMA-ES algorithm generates N parameter sets
 5. **Synthesize Audio** - GPU renders audio for all candidates in parallel
 6. **Extract Embeddings** - Run all candidates through PANNs CNN-14 to get their embedding vectors
 7. **Compare** - Calculate cosine similarity between target embedding and each candidate embedding
 8. **Select & Update** - CMA-ES selects best candidates and updates the search distribution
 9. **Repeat** - Continue until similarity threshold reached or max iterations
 
-The result is a set of 37 synthesizer parameters that produce audio perceptually similar to the target. See the paper PDF for full technical details.
+The result is a set of synnhesizer parameters that will produce audio perceptually similar to the target.
 
 ## System Requirements
 
 - Python >= 3.9
-- NVIDIA GPU with CUDA 12.4 support (recommended)
-- Windows, Linux, or macOS
+- NVIDIA GPU with CUDA 12.4 support (can run on CPU but is very slow)
 
 ## Installation
 
@@ -56,6 +57,7 @@ uv run python run_gui.py
 ```
 
 Features:
+
 - Load target audio files
 - Configure optimization parameters
 - Real-time audio playback
@@ -72,6 +74,7 @@ uv run python validation_sweeps/run_sweep_panns.py
 ```
 
 Options:
+
 - `--quick`: Run a quick validation (fewer sweep points)
 - `--param PARAM_NAME`: Test only a specific parameter
 
@@ -84,6 +87,7 @@ uv run python validation_sweeps/run_sweep_phase.py
 ```
 
 Options:
+
 - `--quick`: Run a quick validation (fewer sweep points)
 - `--param PARAM_NAME`: Test only a specific parameter
 
@@ -111,6 +115,7 @@ Options:
 ## Synthesizer Parameters
 
 The synthesizer has 37 parameters across several categories:
+
 - Oscillators (waveforms, levels, detune, FM, sync, ring mod)
 - Filter (type, cutoff, resonance, envelope)
 - Envelopes (amp and filter ADSR)
